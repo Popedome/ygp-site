@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Garden Podcast — Personalized Growing Guides</title>
+  <meta name="description" content="Listen while you dig. Personalized audio growing guides built for your location, your plants, your soil.">
+  
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --cream: #faf7f2;
+      --cream-alt: #f5f2ec;
+      --sage-light: #d9e8d2;
+      --sage: #8fa882;
+      --moss: #6b8e6f;
+      --dark-green: #3d5a42;
+      --terra: #b8714f;
+      --terra-light: #f5ece2;
+      --text-dark: #1a1a1a;
+      --text-muted: #666;
+      --text-light: #999;
+      --border: #e8e8e4;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'DM Serif Display', serif;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      margin-bottom: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .container-narrow {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    /* ═══ HEADER ═══ */
+    header {
+      padding: 2rem 0;
+      background: var(--cream);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--dark-green);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-mascot {
+      height: 36px;
+      width: auto;
+    }
+
+    .nav-login {
+      background: var(--dark-green);
+      color: white !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .nav-login:hover {
+      background: var(--moss);
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.95rem;
+      margin-left: 2.5rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--dark-green);
+    }
+
+    /* ═══ HERO ═══ */
+    .hero {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, var(--terra-light) 0%, var(--sage-light) 100%);
+    }
+
+    .hero-content {
+      max-width: 620px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 3;
+    }
+
+    .hero h1 {
+      color: var(--dark-green);
+      margin-bottom: 1rem;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      color: var(--dark-green);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .hero-subtitle {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      line-height: 1.8;
+    }
+
+    .mascot-placeholder {
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 2rem;
+      background: linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.3));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      border: 3px dashed var(--moss);
+    }
+
+    .hero-rooty {
+      position: absolute;
+      right: calc(50% - 440px);
+      top: 50%;
+      margin-top: -110px;
+      height: 220px;
+      width: auto;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+      z-index: 10;
+      opacity: 0;
+      animation: rootyHeroHop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s forwards;
+    }
+
+    @media (max-width: 900px) {
+      .hero-rooty {
+        height: 90px;
+        right: 5%;
+        top: 10%;
+        transform: none;
+        opacity: 0.7; /* mobile fallback */
+      }
+      .rooty-float {
+        height: 70px;
+        left: 5% !important;
+        right: 5% !important;
+      }
+    }
+
+    .crop-badges {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 2rem 0;
+    }
+
+    .crop-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--dark-green);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.3s;
+    }
+
+    .crop-badge:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .cta-primary {
+      display: inline-block;
+      padding: 0.7rem 1.8rem;
+      background: var(--dark-green);
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(61, 90, 66, 0.2);
+    }
+
+    .cta-primary:hover {
+      background: var(--moss);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(61, 90, 66, 0.3);
+    }
+
+    .cta-secondary {
+      display: inline-block;
+      padding: 0.7rem 1.8rem;
+      background: white;
+      color: var(--dark-green);
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border: 2px solid var(--dark-green);
+      margin-left: 1rem;
+      transition: all 0.3s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .cta-secondary:hover {
+      background: var(--dark-green);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .cta-group {
+      margin-top: 2rem;
+    }
+
+    /* ═══ SOCIAL PROOF ═══ */
+    .sample-player {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 12px;
+      margin: 2rem auto;
+      max-width: 450px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .sample-label {
+      font-size: 0.85rem;
+      color: var(--terra);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .sample-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+      color: var(--dark-green);
+      margin-bottom: 0.5rem;
+    }
+
+    .social-proof {
+      background: white;
+      padding: 2.5rem;
+      text-align: center;
+      border-radius: 12px;
+      margin-top: 3rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .social-proof p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .stars {
+      color: #f4a460;
+      margin: 0.5rem 0;
+      letter-spacing: 2px;
+      font-size: 1.2rem;
+    }
+
+    /* ═══ SECTION ═══ */
+    section {
+      padding: 5rem 2rem;
+    }
+
+    .section-centered {
+      text-align: center;
+    }
+
+    section h2 {
+      color: var(--dark-green);
+    }
+
+    section > .container, section > .container-narrow {
+      margin-top: 2rem;
+    }
+
+    /* ═══ HOW IT WORKS ═══ */
+    .how-it-works {
+      background: linear-gradient(135deg, var(--sage-light) 0%, var(--cream) 100%);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .step {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      transition: all 0.3s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+
+    .step:hover {
+      transform: translateY(-6px) rotate(1deg);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background: var(--terra);
+      color: white;
+      border-radius: 50%;
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      margin-bottom: 0.75rem;
+      color: var(--dark-green);
+    }
+
+    .step p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .step-mascot {
+      height: 80px;
+      margin: 1rem 0;
+      font-size: 2rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .step-mascot-img {
+      height: 80px;
+      width: auto;
+      margin: 1rem auto 0;
+      display: block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .rooty-float {
+      position: absolute;
+      height: 80px;
+      width: auto;
+      opacity: 0.9;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .rooty-left {
+      left: calc(50% - 380px);
+      top: 80px;
+      transform: rotate(-5deg);
+      animation: peekLeft 4s ease-in-out infinite;
+    }
+
+    .rooty-right {
+      right: calc(50% - 380px);
+      bottom: 80px;
+      transform: rotate(5deg);
+      animation: peekRight 4s ease-in-out infinite;
+    }
+
+    @media (max-width: 900px) {
+      .rooty-float {
+        height: 60px;
+      }
+      .rooty-left {
+        left: 10px;
+      }
+      .rooty-right {
+        right: 10px;
+      }
+    }
+
+    @keyframes peekLeft {
+      0%, 100% { transform: translateX(-10px); }
+      50% { transform: translateX(10px); }
+    }
+
+    @keyframes peekRight {
+      0%, 100% { transform: translateX(10px); }
+      50% { transform: translateX(-10px); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* ═══ DIFFERENCES ═══ */
+    .differences {
+      background: white;
+    }
+
+    .diff-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .diff-item {
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--terra-light), var(--sage-light));
+      border-radius: 12px;
+      border-left: 4px solid var(--terra);
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .diff-item:hover {
+      transform: translateY(-5px) rotate(-1deg);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .diff-item h3 {
+      color: var(--dark-green);
+      margin-bottom: 0.75rem;
+    }
+
+    .diff-item p {
+      color: var(--text-dark);
+      font-size: 0.95rem;
+    }
+
+    /* ═══ EPISODE LENGTHS ═══ */
+    .episode-section {
+      background: linear-gradient(135deg, var(--cream-alt) 0%, var(--sage-light) 100%);
+    }
+
+    .episode-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .episode-card {
+      padding: 2.5rem;
+      background: white;
+      border-radius: 12px;
+      border-left: 4px solid var(--terra);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: all 0.3s;
+    }
+
+    .episode-card:hover {
+      transform: translateY(-5px) rotate(0.5deg);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    }
+
+    .episode-card.hero-product {
+      border-left-color: var(--dark-green);
+      background: linear-gradient(135deg, var(--terra-light), white);
+      border: 2px solid var(--dark-green);
+    }
+
+    .episode-card h3 {
+      color: var(--dark-green);
+    }
+
+    .duration {
+      display: inline-block;
+      background: var(--terra);
+      color: white;
+      padding: 0.3rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .quote-box {
+      background: var(--sage-light);
+      border-left: 4px solid var(--moss);
+      padding: 0.75rem;
+      border-radius: 8px;
+      margin-top: 1.5rem;
+      font-style: italic;
+      color: var(--text-dark);
+    }
+
+    /* ═══ CROP LIBRARY ═══ */
+    .crops-section {
+      background: white;
+    }
+
+    .crop-tiers {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .crop-tier {
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--sage-light), var(--cream-alt));
+      border-radius: 12px;
+      border-top: 4px solid var(--moss);
+    }
+
+    .tier-label {
+      display: inline-block;
+      background: var(--moss);
+      color: white;
+      padding: 0.6rem 1.4rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .crop-list {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .crop-item {
+      padding: 0.4rem;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.15rem;
+      transition: all 0.3s;
+    }
+
+    .crop-emoji {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    .crop-name {
+      font-size: 0.85rem;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .crop-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* ═══ PRICING ═══ */
+    .pricing-section {
+      background: linear-gradient(135deg, var(--terra-light) 0%, var(--sage-light) 100%);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .pricing-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      transition: all 0.3s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-8px) rotate(0.5deg);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--dark-green);
+      border-width: 3px;
+      background: linear-gradient(135deg, rgba(61, 90, 66, 0.05), white);
+    }
+
+    .price {
+      font-family: 'DM Serif Display', serif;
+      font-size: 2.5rem;
+      color: var(--dark-green);
+      margin: 1rem 0;
+      font-weight: 600;
+    }
+
+    .price-period {
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .pricing-card h3 {
+      color: var(--dark-green);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin: 1.5rem 0;
+    }
+
+    .pricing-features li {
+      padding: 0.7rem 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+
+    .pricing-features li:before {
+      content: "✓ ";
+      color: var(--moss);
+      font-weight: bold;
+      margin-right: 0.5rem;
+    }
+
+    /* ═══ TESTIMONIAL ═══ */
+    .testimonial-section {
+      background: white;
+    }
+
+    .testimonial {
+      background: linear-gradient(135deg, var(--terra-light), var(--sage-light));
+      padding: 4rem 2rem;
+      border-radius: 12px;
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .testimonial-quote {
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-style: italic;
+      color: var(--text-dark);
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+
+    .testimonial-author {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .testimonial-mascot {
+      font-size: 3rem;
+      margin-top: 1.5rem;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* ═══ FOOTER ═══ */
+    footer {
+      background: var(--dark-green);
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      margin-top: 4rem;
+    }
+
+    footer p {
+      margin: 0.5rem 0;
+      opacity: 0.9;
+    }
+
+    footer a {
+      color: var(--sage);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 768px) {
+      .header-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      nav {
+        display: none;
+      }
+
+      nav a {
+        margin-left: 0;
+        display: block;
+        margin: 0.5rem 0;
+      }
+
+      .cta-secondary {
+        display: block;
+        margin: 1rem 0 0 0;
+      }
+
+      .crop-list {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      /* Stack testimonials vertically on mobile */
+      .testimonial-section .container > div {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+      }
+    }
+
+    .hero-rooty {
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--cream);
+    }
+
+    .rooty-video-container {
+      position: relative;
+      display: inline-block;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--cream);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    }
+
+    .rooty-video-container video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+
+    .section-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-heading-row h2 {
+      margin-bottom: 0;
+    }
+
+    .section-heading-row .heading-rooty {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--cream);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    .section-heading-row .heading-rooty video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* ═══ CROP ACCORDION ═══ */
+    .crop-hidden {
+      display: none;
+    }
+
+    .show-more-crops {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.8rem;
+      background: transparent;
+      color: var(--dark-green);
+      border: 2px solid var(--dark-green);
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .show-more-crops:hover {
+      background: var(--dark-green);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* ═══ KEYFRAMES ═══ */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(-40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(40px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.85); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes hopIn {
+      0% { opacity: 0; transform: translateY(30px); }
+      60% { opacity: 1; transform: translateY(-8px); }
+      80% { transform: translateY(3px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes heroTitleDrop {
+      from { opacity: 0; transform: translateY(-25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes rootyHeroHop {
+      0% { opacity: 0; transform: translateY(50px) translateX(20px); }
+      50% { opacity: 1; transform: translateY(-12px) translateX(0); }
+      75% { transform: translateY(4px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideInLeft {
+      from { opacity: 0; transform: translateX(-60px) rotate(-10deg); }
+      to { opacity: 1; transform: translateX(0) rotate(-5deg); }
+    }
+
+    @keyframes slideInRight {
+      from { opacity: 0; transform: translateX(60px) rotate(10deg); }
+      to { opacity: 1; transform: translateX(0) rotate(5deg); }
+    }
+
+    @keyframes peekLeft {
+      0%, 100% { transform: translateX(-5px) rotate(-5deg); }
+      50% { transform: translateX(5px) rotate(-5deg); }
+    }
+
+    @keyframes peekRight {
+      0%, 100% { transform: translateX(5px) rotate(5deg); }
+      50% { transform: translateX(-5px) rotate(5deg); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* ═══ HERO ENTRANCE (on page load, not scroll) ═══ */
+    .hero {
+      animation: fadeIn 0.8s ease-out both;
+    }
+
+    .hero h1 {
+      opacity: 0;
+      animation: heroTitleDrop 0.6s ease-out 0.3s forwards;
+    }
+
+    /* ═══ SCROLL-TRIGGERED ANIMATIONS ═══ */
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    /* When visible class is added, element becomes visible AND runs animation */
+    .animate-on-scroll.visible {
+      opacity: 1 !important;
+      transform: translateY(0);
+    }
+
+    /* Specific animation types */
+    .anim-fade-up.visible { animation: fadeInUp 0.6s ease-out forwards; }
+    .anim-fade-left.visible { animation: fadeInLeft 0.6s ease-out forwards; }
+    .anim-fade-right.visible { animation: fadeInRight 0.6s ease-out forwards; }
+    .anim-scale.visible { animation: scaleIn 0.5s ease-out forwards; }
+    .anim-hop.visible { animation: hopIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+    /* Rooty section floats */
+    .rooty-float {
+      opacity: 0;
+    }
+    .rooty-float.rooty-left.visible {
+      animation: slideInLeft 0.7s ease-out forwards;
+      opacity: 1;
+    }
+    .rooty-float.rooty-right.visible {
+      animation: slideInRight 0.7s ease-out forwards;
+      opacity: 1;
+    }
+
+    /* Stagger delays */
+    .delay-1 { animation-delay: 0.1s !important; }
+    .delay-2 { animation-delay: 0.2s !important; }
+    .delay-3 { animation-delay: 0.3s !important; }
+    .delay-4 { animation-delay: 0.4s !important; }
+    .delay-5 { animation-delay: 0.5s !important; }
+    .delay-6 { animation-delay: 0.6s !important; }
+
+    /* ═══ EPISODE PLAYER SAMPLE ═══ */
+    .episode-sample {
+      background: var(--cream-alt);
+      padding: 4rem 0;
+    }
+
+    .episode-sample-subtext {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .episode-player-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .episode-info {
+      margin-bottom: 1.5rem;
+    }
+
+    .episode-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--dark-green);
+      margin-bottom: 0.5rem;
+    }
+
+    .episode-meta {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .episode-audio {
+      width: 100%;
+      margin-bottom: 1.5rem;
+      height: 40px;
+    }
+
+    .episode-note {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      text-align: center;
+      font-style: italic;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <img src="rooty_hero.png" alt="Rooty" class="logo-mascot" />
+        <span>Your Garden Podcast</span>
+      </a>
+      <nav>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#crops">Crops</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#" class="nav-login">Log In</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="hero" style="position: relative; overflow: hidden;">
+    <!-- Rooty floating on the right side of hero -->
+    <video src="rooty_hero_v2.mp4" autoplay muted playsinline class="hero-rooty" style="object-fit: contain;"></video>
+    
+    <div class="hero-content">
+      <h1>Your Garden Podcast</h1>
+      <p class="hero-tagline">Listen while you dig.</p>
+      <p class="hero-subtitle">Personalized audio growing guides built for YOUR location, YOUR plants, YOUR soil. Not generic YouTube advice.</p>
+      
+      <!-- Floating crop badges -->
+      <div class="crop-badges">
+        <span class="crop-badge">🍅 Tomatoes</span>
+        <span class="crop-badge">🫑 Peppers</span>
+        <span class="crop-badge">🥒 Cucumbers</span>
+        <span class="crop-badge">🌿 Herbs</span>
+        <span class="crop-badge">🍓 Berries</span>
+        <span class="crop-badge">🥕 Carrots</span>
+        <span class="crop-badge">🌽 Corn</span>
+        <span class="crop-badge">🥬 Greens</span>
+      </div>
+
+      <!-- Sample player -->
+      <div class="sample-player">
+        <p class="sample-label">🎧 Hear a sample</p>
+        <p class="sample-title">Planting Lettuce Seeds in Colorado Springs</p>
+        <audio controls preload="metadata" style="width: 100%; max-width: 400px; margin: 0.75rem auto; display: block;">
+          <source src="sample_clip.mp3" type="audio/mpeg">
+        </audio>
+      </div>
+
+      <div class="cta-group">
+        <button class="cta-primary">Get Started Free</button>
+        <a href="#pricing" class="cta-secondary">See Plans →</a>
+      </div>
+
+      <div class="social-proof">
+        <div class="stars">★★★★★</div>
+        <p style="font-weight: 500;">"I learned more about tomatoes in 40 minutes than I did watching 5 hours of YouTube."</p>
+        <p style="margin-top: 0.5rem;">— Zone 6a, Colorado Springs</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HOW IT WORKS ═══ -->
+  <section id="how-it-works" class="how-it-works section-centered" style="position: relative; overflow: visible;">
+    <!-- Rooty peeking from the left -->
+    
+    <div class="container">
+      <div class="section-heading-row animate-on-scroll anim-fade-up">
+        <h2>How It Works</h2>
+        <div class="heading-rooty"><video preload="none" data-src="rooty_bopping.mp4" muted playsinline></video></div>
+      </div>
+      <div class="steps">
+        <div class="step animate-on-scroll anim-fade-up delay-1">
+          <div class="step-number">1</div>
+          <h3>Tell Us About Your Garden</h3>
+          <p>Your location, zone, soil type. We ask the right questions.</p>
+          </div>
+        <div class="step animate-on-scroll anim-fade-up delay-2">
+          <div class="step-number">2</div>
+          <h3>We Build Your Episodes</h3>
+          <p>Personalized to your hardiness zone, frost dates, and soil.</p>
+        </div>
+        <div class="step animate-on-scroll anim-fade-up delay-3">
+          <div class="step-number">3</div>
+          <h3>Listen While You Dig</h3>
+          <p>Expert advice in your ear, exactly when you need it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EPISODE PLAYER SAMPLE ═══ -->
+  <section class="episode-sample section-centered">
+    <div class="container">
+      <h2>Hear What a Full Episode Sounds Like</h2>
+      <p class="episode-sample-subtext">This is a real episode built for a beginner gardener in Colorado Springs, growing lettuce in a raised bed. Yours will be personalized to YOUR garden.</p>
+
+      <div class="episode-player-card">
+        <div class="episode-info">
+          <div class="episode-title">🥬 Lettuce Growing Guide</div>
+          <div class="episode-meta">Beginner | Colorado Springs | Raised Bed | Full Episode</div>
+        </div>
+
+        <audio controls class="episode-audio">
+          <source src="sample_episode.mp4" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+
+        <div class="episode-note">
+          This is a sample. Your episodes are built from scratch for your specific location, soil, and experience level.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ WHAT MAKES IT DIFFERENT ═══ -->
+  <section class="differences section-centered" style="position: relative; overflow: visible;">
+    <!-- Rooty vibing on the right -->
+    
+    <div class="container">
+      <div class="section-heading-row animate-on-scroll anim-fade-up">
+        <div class="heading-rooty"><video preload="none" data-src="rooty_rocking.mp4" muted playsinline></video></div>
+        <h2>What Makes It Different</h2>
+      </div>
+      <div class="diff-grid">
+        <div class="diff-item animate-on-scroll anim-fade-left delay-1">
+          <h3>🌍 Zone-Specific</h3>
+          <p>We know your frost dates, first bloom, and last freeze. Not some generic advice for "the north."</p>
+        </div>
+        <div class="diff-item animate-on-scroll anim-fade-up delay-2">
+          <h3>🌱 Soil-Aware</h3>
+          <p>Clay, loam, sandy, rocky. We adjust recommendations based on what you're actually working with.</p>
+        </div>
+        <div class="diff-item animate-on-scroll anim-fade-right delay-3">
+          <h3>📚 Expert Sources</h3>
+          <p>Every episode is built from university extension research, not random internet opinions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ EPISODE LENGTHS ═══ -->
+  <section id="episodes" class="episode-section section-centered" style="position: relative; overflow: visible;">
+    <!-- Rooty reading on the left -->
+    
+    <div class="container">
+      
+      <div class="section-heading-row animate-on-scroll anim-fade-up">
+        <h2>Two Ways to Learn</h2>
+        <div class="heading-rooty"><video preload="none" data-src="rooty_reading_anim.mp4" muted playsinline></video></div>
+      </div>
+      <div class="episode-types">
+        <div class="episode-card animate-on-scroll anim-fade-left delay-1">
+          <h3>⚡ Quick</h3>
+          <div class="duration">8–10 minutes</div>
+          <p>Essentials only. Plant it, water it, wait. Perfect for the morning commute or a quick refresher.</p>
+            <p style="font-style: italic; font-size: 0.85rem; color: var(--text-muted); margin-top: 0.8rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 0.8rem;">"Listened on my way to the garden center. By the time I got there, I knew exactly what to buy." <span style="display: block; font-style: normal; font-size: 0.8rem; margin-top: 0.3rem;">— Zone 7a, Nashville</span></p>
+        </div>
+        <div class="episode-card hero-product animate-on-scroll anim-fade-right delay-2">
+          <h3>🎓 Full Masterclass</h3>
+          <div class="duration">30–60 minutes</div>
+          <p>Go deep. Learn the why behind every step. Varieties, timing, harvest secrets, storage.</p>
+          <div class="quote-box">
+            "In 40 minutes, I learned what tomatoes grow best in my area, how to plant them properly, what to avoid, and the safest time to harvest. It was wonderful." — Zone 6a, Colorado Springs
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CROP LIBRARY ═══ -->
+  <section id="crops" class="crops-section section-centered">
+    <div class="container">
+      <div class="section-heading-row animate-on-scroll anim-fade-up">
+        <h2>46 Crops and Growing</h2>
+        <div class="heading-rooty"><video preload="none" data-src="rooty_growing.mp4" muted playsinline></video></div>
+      </div>
+      <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 1.1rem;">From common favorites to heirloom treasures.</p>
+      
+      <div class="crop-list" style="max-width: 900px; margin: 2rem auto 0;">
+        <div class="crop-item animate-on-scroll anim-hop delay-1 "><span class="crop-emoji">🍅</span><span class="crop-name">Tomato</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 "><span class="crop-emoji">🫑</span><span class="crop-name">Bell Pepper</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 "><span class="crop-emoji">🌶️</span><span class="crop-name">Hot Pepper</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 "><span class="crop-emoji">🥒</span><span class="crop-name">Cucumber</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-5 "><span class="crop-emoji">🥒</span><span class="crop-name">Zucchini</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-6 "><span class="crop-emoji">🎃</span><span class="crop-name">Squash</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-1 "><span class="crop-emoji">🍉</span><span class="crop-name">Watermelon</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 "><span class="crop-emoji">🫘</span><span class="crop-name">Green Bean</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 "><span class="crop-emoji">🌽</span><span class="crop-name">Corn</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 "><span class="crop-emoji">🥔</span><span class="crop-name">Potato</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-5 "><span class="crop-emoji">🥬</span><span class="crop-name">Lettuce</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-6 "><span class="crop-emoji">🥬</span><span class="crop-name">Spinach</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-1 "><span class="crop-emoji">🥦</span><span class="crop-name">Broccoli</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 "><span class="crop-emoji">🥕</span><span class="crop-name">Carrot</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 "><span class="crop-emoji">🧄</span><span class="crop-name">Garlic</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 "><span class="crop-emoji">🧅</span><span class="crop-name">Onion</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-5 "><span class="crop-emoji">🌿</span><span class="crop-name">Basil</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-6 "><span class="crop-emoji">🍆</span><span class="crop-name">Eggplant</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-1 crop-hidden"><span class="crop-emoji">🥬</span><span class="crop-name">Kale</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 crop-hidden"><span class="crop-emoji">🥦</span><span class="crop-name">Cauliflower</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 crop-hidden"><span class="crop-emoji">🥦</span><span class="crop-name">Brussels Sprouts</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 crop-hidden"><span class="crop-emoji">🥬</span><span class="crop-name">Cabbage</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-5 crop-hidden"><span class="crop-emoji">🌱</span><span class="crop-name">Beet</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-6 crop-hidden"><span class="crop-emoji">🌱</span><span class="crop-name">Radish</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-1 crop-hidden"><span class="crop-emoji">🫛</span><span class="crop-name">Peas</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 crop-hidden"><span class="crop-emoji">🎃</span><span class="crop-name">Pumpkin</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 crop-hidden"><span class="crop-emoji">🍈</span><span class="crop-name">Cantaloupe</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Thyme</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-5 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Oregano</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-6 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Rosemary</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-1 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Mint</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Parsley</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Cilantro</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Chives</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-5 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Dill</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-6 crop-hidden"><span class="crop-emoji">🧅</span><span class="crop-name">Leeks</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-1 crop-hidden"><span class="crop-emoji">🥬</span><span class="crop-name">Swiss Chard</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 crop-hidden"><span class="crop-emoji">🥬</span><span class="crop-name">Celery</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Okra</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 crop-hidden"><span class="crop-emoji">🍠</span><span class="crop-name">Sweet Potato</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-5 crop-hidden"><span class="crop-emoji">🥬</span><span class="crop-name">Collard Greens</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-6 crop-hidden"><span class="crop-emoji">🫘</span><span class="crop-name">Southern Peas</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-1 crop-hidden"><span class="crop-emoji">🥬</span><span class="crop-name">Mustard Greens</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-2 crop-hidden"><span class="crop-emoji">🌱</span><span class="crop-name">Turnip</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-3 crop-hidden"><span class="crop-emoji">🌿</span><span class="crop-name">Asparagus</span></div>
+        <div class="crop-item animate-on-scroll anim-hop delay-4 crop-hidden"><span class="crop-emoji">🍓</span><span class="crop-name">Strawberry</span></div>
+      </div>
+      <button class="show-more-crops" onclick="document.querySelectorAll('.crop-hidden').forEach(el => el.style.display = 'flex'); this.style.display = 'none';">See all 46 crops →</button>
+    </div>
+  </section>
+
+  <!-- ═══ PRICING ═══ -->
+  <section id="pricing" class="pricing-section section-centered">
+    <div class="container">
+      <h2 class="animate-on-scroll anim-fade-up">Simple Pricing</h2>
+      <p style="color: var(--text-muted); margin-bottom: 2rem;">No surprises. Cancel anytime.</p>
+      
+      <div class="pricing-grid">
+<div class="pricing-card animate-on-scroll anim-fade-up delay-2">
+          <h3>Starter Garden Kit</h3>
+          <div class="price">$24.99</div>
+          <p class="price-period">One-time</p>
+          <ul class="pricing-features">
+            <li>7 crops</li>
+            <li>Quick + Full lengths</li>
+            <li>Personalized to your zone</li>
+            <li>Download for offline</li>
+          </ul>
+          <button class="cta-primary">Buy Now</button>
+        </div>
+
+        <div class="pricing-card featured animate-on-scroll anim-scale delay-3">
+          <h3>Seasonal</h3>
+          <div class="price">$69</div>
+          <p class="price-period">Per year</p>
+          <ul class="pricing-features">
+            <li>Up to 21 crops</li>
+            <li>Quick + Full lengths</li>
+            <li>Quarterly refreshes</li>
+            <li>Early access to new crops</li>
+            <li>Email support</li>
+          </ul>
+          <button class="cta-primary">Subscribe</button>
+        </div>
+
+        <div class="pricing-card animate-on-scroll anim-fade-up delay-4">
+          <h3>Master Gardener</h3>
+          <div class="price">$119</div>
+          <p class="price-period">Per year</p>
+          <ul class="pricing-features">
+            <li>Full library (46+ crops)</li>
+            <li>All episode lengths</li>
+            <li>Deep dives + masterclasses</li>
+            <li>Q&A mode (coming soon)</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="cta-primary">Subscribe</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ TESTIMONIAL ═══ -->
+  <section class="testimonial-section section-centered">
+    <div class="container">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0;">
+        <!-- Left testimonial - Nashville -->
+        <div class="testimonial animate-on-scroll anim-scale delay-1">
+          <p class="testimonial-quote">"Listened on my way to the garden center. By the time I got there, I knew exactly what to buy."</p>
+          <p class="testimonial-author">— Zone 7a, Nashville</p>
+        </div>
+
+        <!-- Right testimonial - Colorado Springs -->
+        <div class="testimonial animate-on-scroll anim-scale delay-2">
+          <p class="testimonial-quote">"In 40 minutes, I learned what tomatoes grow best in my area, how to plant them properly, what to avoid, and the safest time to harvest. It was wonderful."</p>
+          <p class="testimonial-author">— Zone 6a, Colorado Springs</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="container">
+      <p style="font-size: 1.3rem; margin-bottom: 0.5rem;"><strong>Your Garden Podcast</strong></p>
+      <p>Listen while you dig.</p>
+      <p style="margin-top: 2rem; opacity: 0.7; /* mobile fallback */ font-size: 0.9rem;">© 2026 Your Garden Podcast. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Simple scroll-based animation trigger
+    function checkVisibility() {
+      const elements = document.querySelectorAll('.animate-on-scroll:not(.visible)');
+      const windowHeight = window.innerHeight;
+      
+      elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < windowHeight * 0.9 && rect.bottom > 0) {
+          el.classList.add('visible');
+        }
+      });
+    }
+
+    // Run on scroll and on load
+    window.addEventListener('scroll', checkVisibility, { passive: true });
+    window.addEventListener('load', checkVisibility);
+    // Also run immediately and after a short delay
+    checkVisibility();
+    setTimeout(checkVisibility, 100);
+    setTimeout(checkVisibility, 500);
+
+    // Crop "See all" button
+    const showBtn = document.querySelector('.show-more-crops');
+    if (showBtn) {
+      showBtn.addEventListener('click', () => {
+        document.querySelectorAll('.crop-hidden').forEach(el => {
+          el.style.display = 'flex';
+          setTimeout(() => el.classList.add('visible'), 50);
+        });
+        showBtn.style.display = 'none';
+      });
+    }
+
+    // Lazy load + replay videos on scroll
+    const videoObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const container = entry.target;
+        const video = container.querySelector('video') || 
+                      (container.tagName === 'VIDEO' ? container : null);
+        if (!video) return;
+        
+        if (entry.isIntersecting) {
+          if (video.dataset.src && !video.src) {
+            video.src = video.dataset.src;
+          }
+          video.currentTime = 0;
+          const p = video.play();
+          if (p) p.catch(() => {});
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.heading-rooty, .rooty-video-container').forEach(el => {
+      videoObserver.observe(el);
+    });
+
+  </script>
+</body>
+</html>
