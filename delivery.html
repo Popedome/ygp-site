@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Garden Kit - Ready!</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --cream: #faf7f2;
+      --cream-alt: #f5f2ec;
+      --sage-light: #d9e8d2;
+      --sage: #8fa882;
+      --moss: #6b8e6f;
+      --dark-green: #3d5a42;
+      --terra: #b8714f;
+      --terra-light: #f5ece2;
+      --text-dark: #1a1a1a;
+      --text-muted: #666;
+      --border: #e8e8e4;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.6;
+    }
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; }
+    h1 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--dark-green); }
+    h2 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--dark-green); }
+    h3 { font-size: 1.4rem; margin-bottom: 1rem; color: var(--dark-green); }
+    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+    .header { text-align: center; margin-bottom: 4rem; }
+    .profile-tag { display: inline-block; background: var(--sage-light); color: var(--dark-green); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; margin: 0.5rem 0.25rem; }
+
+    .explanation {
+      text-align: center;
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 3rem;
+    }
+
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 3rem;
+      margin-bottom: 3rem;
+    }
+
+    .vertical-divider {
+      background: var(--border);
+      width: 1px;
+      grid-column: 2;
+    }
+
+    .left-column {
+      grid-column: 1;
+    }
+
+    .right-column {
+      grid-column: 3;
+    }
+
+    @media (max-width: 768px) {
+      .split-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .vertical-divider {
+        display: none;
+      }
+
+      .left-column,
+      .right-column {
+        grid-column: 1;
+      }
+
+      .horizontal-divider {
+        display: block;
+        height: 1px;
+        background: var(--border);
+        margin: 2rem 0;
+      }
+    }
+
+    .horizontal-divider {
+      display: none;
+    }
+
+    .episode-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .episode-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .crop-emoji { font-size: 3rem; }
+    .crop-title { flex: 1; }
+    .crop-title h3 { margin-bottom: 0.25rem; }
+    .crop-title .profile-tag { font-size: 0.8rem; }
+    .episode-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .episode-row:last-child { border-bottom: none; }
+    .episode-label { color: var(--text-muted); font-size: 0.9rem; }
+    .play-btn {
+      background: var(--dark-green);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .play-btn:hover { background: var(--moss); }
+    .play-btn:active { transform: scale(0.98); }
+    .player-container {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--cream-alt);
+      border-radius: 8px;
+      display: none;
+    }
+    .player-container.active { display: block; }
+    audio {
+      width: 100%;
+      height: 40px;
+    }
+    .rss-section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+    }
+    .rss-title { font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem; }
+    .feed-url {
+      background: var(--cream-alt);
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: 'Monaco', monospace;
+      font-size: 0.9rem;
+      word-break: break-all;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .copy-btn {
+      background: var(--terra);
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+    .copy-btn:hover { background: #a0643d; }
+    .copy-feedback {
+      display: none;
+      color: var(--sage);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .copy-feedback.show { display: inline; }
+    .accordion {
+      margin-top: 1.5rem;
+    }
+    .accordion-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+    }
+    .accordion-header {
+      padding: 1rem;
+      background: var(--cream-alt);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .accordion-header:hover { background: var(--sage-light); }
+    .accordion-header.active { background: var(--dark-green); color: white; }
+    .accordion-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+    .accordion-header.active .accordion-icon { transform: rotate(180deg); }
+    .accordion-content {
+      display: none;
+      padding: 1.5rem;
+      background: white;
+    }
+    .accordion-content.active { display: block; }
+    .accordion-content ol {
+      list-style-position: inside;
+      line-height: 1.8;
+      color: var(--text-dark);
+    }
+    .accordion-content li { margin-bottom: 0.75rem; }
+    .footer {
+      text-align: center;
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    .footer-email { font-weight: 600; color: var(--dark-green); }
+    .footer-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🌱 Your garden kit is ready, Sarah!</h1>
+      <p style="font-size: 1.1rem; color: var(--text-muted);">Here are your personalized growing guides for <strong>Milton, WI • Zone 5b</strong></p>
+    </div>
+
+    <div class="explanation">
+      <p>Listen right here or add your episodes to Apple Podcasts, Spotify, or any podcast app.</p>
+    </div>
+
+    <div class="split-layout">
+      <div class="left-column">
+        <h3>🎧 Listen Here</h3>
+        <div id="episodes"></div>
+      </div>
+
+      <div class="vertical-divider"></div>
+
+      <div class="right-column">
+        <h3>📱 Add to Your Podcast App</h3>
+
+        <div class="rss-section">
+          <p class="rss-title">Add your private feed to any podcast app. This link is yours — don't share it.</p>
+
+          <div class="feed-url">
+            <span>https://feed.yourgardencast.com/f/abc123xyz789/feed.xml</span>
+            <button class="copy-btn" onclick="copyFeedUrl()">Copy Link</button>
+            <span class="copy-feedback" id="copyFeedback">Copied!</span>
+          </div>
+
+          <div class="accordion">
+            <div class="accordion-item">
+              <div class="accordion-header" onclick="toggleAccordion(0)">
+                <span>📱 iPhone / Apple Podcasts</span>
+                <span class="accordion-icon">▼</span>
+              </div>
+              <div class="accordion-content" id="accordion0">
+                <ol>
+                  <li>Open the <strong>Apple Podcasts</strong> app</li>
+                  <li>Tap <strong>Library</strong> at the bottom</li>
+                  <li>Tap the three dots (<strong>...</strong>) in the top right</li>
+                  <li>Tap <strong>Follow a Show by URL</strong></li>
+                  <li>Paste your link above and tap <strong>Follow</strong></li>
+                  <li>Your episodes will appear in your Library within a minute</li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <div class="accordion-header" onclick="toggleAccordion(1)">
+                <span>🤖 Android / Spotify</span>
+                <span class="accordion-icon">▼</span>
+              </div>
+              <div class="accordion-content" id="accordion1">
+                <ol>
+                  <li>Open the <strong>Spotify</strong> app</li>
+                  <li>Tap the <strong>Activity</strong> icon (bottom right)</li>
+                  <li>Tap <strong>Subscriptions</strong> in the top right</li>
+                  <li>Tap the three dots (<strong>...</strong>) menu</li>
+                  <li>Tap <strong>Add by RSS feed</strong></li>
+                  <li>Paste your link and tap <strong>Subscribe</strong></li>
+                </ol>
+              </div>
+            </div>
+
+            <div class="accordion-item">
+              <div class="accordion-header" onclick="toggleAccordion(2)">
+                <span>🎙️ Any app (Pocket Casts, Overcast, etc.)</span>
+                <span class="accordion-icon">▼</span>
+              </div>
+              <div class="accordion-content" id="accordion2">
+                <ol>
+                  <li>Copy your private feed link above</li>
+                  <li>Open your podcast app (Pocket Casts, Overcast, Podcast Addict, etc.)</li>
+                  <li>Look for <strong>Add by URL</strong> or <strong>Add RSS Feed</strong> (usually in Settings or the + menu)</li>
+                  <li>Paste your link and tap <strong>Subscribe</strong> or <strong>Add</strong></li>
+                  <li>Episodes will sync automatically</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="horizontal-divider"></div>
+
+    <div class="footer">
+      <p>Questions? <span class="footer-email">hello@yourgardencast.com</span></p>
+      <p class="footer-note">This is your personal kit. Episodes are personalized to your garden profile and available as long as your subscription is active.</p>
+    </div>
+  </div>
+
+  <script>
+    const DEMO_CROPS = [
+      { name: 'Tomato', emoji: '🍅', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
+      { name: 'Kale', emoji: '🥬', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
+      { name: 'Cucumber', emoji: '🥒', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
+      { name: 'Carrot', emoji: '🥕', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
+      { name: 'Basil', emoji: '🌿', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
+      { name: 'Zucchini', emoji: '🥒', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
+      { name: 'Green Beans', emoji: '🫘', zone: '5b', type: 'Raised Bed', level: 'Intermediate' }
+    ];
+
+    function renderEpisodes() {
+      const container = document.getElementById('episodes');
+      container.innerHTML = '';
+
+      DEMO_CROPS.forEach(crop => {
+        const card = document.createElement('div');
+        card.className = 'episode-card';
+        card.innerHTML = `
+          <div class="episode-header">
+            <div class="crop-emoji">${crop.emoji}</div>
+            <div class="crop-title">
+              <h3>${crop.name}</h3>
+              <span class="profile-tag">Zone ${crop.zone}</span>
+              <span class="profile-tag">${crop.type}</span>
+              <span class="profile-tag">${crop.level}</span>
+            </div>
+          </div>
+          <div class="episode-row">
+            <span class="episode-label">Short (8-10 min)</span>
+            <button class="play-btn" onclick="playEpisode(event, '${crop.name}', 'short')">▶ Play</button>
+          </div>
+          <div class="episode-row">
+            <span class="episode-label">Full (20-30 min)</span>
+            <button class="play-btn" onclick="playEpisode(event, '${crop.name}', 'full')">▶ Play</button>
+          </div>
+          <div class="player-container" id="player-${crop.name}-short"></div>
+          <div class="player-container" id="player-${crop.name}-full"></div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    let currentPlayer = null;
+
+    function playEpisode(event, cropName, length) {
+      event.preventDefault();
+      const playerId = `player-${cropName}-${length}`;
+      const playerContainer = document.getElementById(playerId);
+
+      // Stop any currently playing audio
+      if (currentPlayer && currentPlayer !== playerId) {
+        document.getElementById(currentPlayer).classList.remove('active');
+        const audio = document.getElementById(currentPlayer).querySelector('audio');
+        if (audio) audio.pause();
+      }
+
+      // Toggle current player
+      playerContainer.classList.toggle('active');
+
+      if (playerContainer.classList.contains('active')) {
+        // Create audio element if it doesn't exist
+        if (!playerContainer.querySelector('audio')) {
+          const audio = document.createElement('audio');
+          audio.controls = true;
+          audio.src = '../ygp-site-v2/sample_clip.mp3';
+          playerContainer.appendChild(audio);
+        }
+        playerContainer.querySelector('audio').play();
+        currentPlayer = playerId;
+      } else {
+        const audio = playerContainer.querySelector('audio');
+        if (audio) audio.pause();
+        currentPlayer = null;
+      }
+    }
+
+    function copyFeedUrl() {
+      const url = 'https://feed.yourgardencast.com/f/abc123xyz789/feed.xml';
+      navigator.clipboard.writeText(url).then(() => {
+        const feedback = document.getElementById('copyFeedback');
+        feedback.classList.add('show');
+        setTimeout(() => feedback.classList.remove('show'), 2000);
+      });
+    }
+
+    function toggleAccordion(index) {
+      const header = document.querySelector(`.accordion-item:nth-child(${index + 1}) .accordion-header`);
+      const content = document.getElementById(`accordion${index}`);
+
+      header.classList.toggle('active');
+      content.classList.toggle('active');
+    }
+
+    // Initial render
+    renderEpisodes();
+  </script>
+</body>
+</html>
