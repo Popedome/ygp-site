@@ -245,6 +245,26 @@
 
 
 
+      <!-- Upsell -->
+      <div style="background: var(--sage-light); border-radius: 12px; padding: 1.5rem; margin-top: 2rem; text-align: center;">
+        <h3 style="color: var(--dark-green); font-size: 1.2rem; margin-bottom: 0.5rem;">🌱 Want more crops?</h3>
+        <p style="color: var(--text-dark); font-size: 0.9rem; margin-bottom: 1rem;">Upgrade your kit to grow even more this season.</p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+          <a href="https://yourgardenpodcast.com/intake.html?plan=seasonal" style="background: var(--dark-green); color: white; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">Seasonal — 21 crops · $69/yr</a>
+          <a href="https://yourgardenpodcast.com/intake.html?plan=master" style="background: var(--terra); color: white; padding: 0.6rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">Master Gardener — 46+ crops · $119/yr</a>
+        </div>
+      </div>
+
+      <!-- Share / Review -->
+      <div style="background: white; border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-top: 1rem; text-align: center;">
+        <h3 style="color: var(--dark-green); font-size: 1.1rem; margin-bottom: 0.5rem;">❤️ Loving your garden kit?</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Share it with a friend who gardens — or leave us a quick review. It means the world.</p>
+        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+          <button onclick="shareKit()" style="background: var(--dark-green); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem;">📤 Share with a friend</button>
+          <a href="mailto:hello@yourgardenpodcast.com?subject=I love my garden kit!&body=Hey! Just wanted to say..." style="background: white; color: var(--dark-green); border: 2px solid var(--dark-green); padding: 0.5rem 1.2rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">✍️ Leave a review</a>
+        </div>
+      </div>
+
       <div class="footer">
         <p>Questions? <span class="footer-email">hello@yourgardenpodcast.com</span></p>
         <p class="footer-note">This is your personal garden kit. Episodes are personalized to your growing profile.</p>
@@ -464,6 +484,18 @@
         btn.textContent = '⏸ Pause';
         currentAudio = audio;
         currentIndex = index;
+      }
+    }
+
+    function shareKit() {
+      const text = 'I just got personalized garden growing guides from Your Garden Podcast — audio episodes tailored to my exact zone and crops. Check it out!';
+      const url = 'https://yourgardenpodcast.com';
+      if (navigator.share) {
+        navigator.share({ title: 'Your Garden Podcast', text, url });
+      } else {
+        navigator.clipboard.writeText(text + ' ' + url).then(() => {
+          alert('Link copied! Paste it in a text or email to share.');
+        });
       }
     }
 
