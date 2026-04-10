@@ -1146,6 +1146,13 @@ document.getElementById('btn-build').addEventListener('click', function() {
   // Map intermediate/advanced to 'experienced'
   if (skill === 'intermediate' || skill === 'advanced') skill = 'experienced';
 
+  var gardenTypeEl = document.querySelector('input[name="garden-type"]:checked');
+  var gardenType = gardenTypeEl ? gardenTypeEl.value : 'inground';
+  var soilEl = document.querySelector('input[name="soil"]:checked');
+  var soil = soilEl ? soilEl.value : 'loam';
+  var sunEl = document.querySelector('input[name="sun"]:checked');
+  var sun = sunEl ? sunEl.value : 'full';
+
   var plan = new URLSearchParams(window.location.search).get('plan') || 'starter';
 
   var btn = document.getElementById('btn-build');
@@ -1164,7 +1171,10 @@ document.getElementById('btn-build').addEventListener('click', function() {
       region: '',
       zip: state.zip,
       email: state.email,
-      first_name: state.firstName || ''
+      first_name: state.firstName || '',
+      garden_type: gardenType,
+      soil: soil,
+      sun: sun
     })
   })
   .then(function(r) { return r.json(); })
