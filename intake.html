@@ -770,7 +770,7 @@ input.has-error { border-color: #c94f4f !important; box-shadow: none !important;
         <source src="../ygp-site-v2/rooty_growing.mp4" type="video/mp4">
       </video>
       <h1>Building your<br>garden kit.</h1>
-      <p class="building-sub">Personalizing your plan for Zone 5b</p>
+      <p class="building-sub" id="building-zone">Personalizing your plan...</p>
     </div>
 
     <div class="progress-wrap">
@@ -798,6 +798,11 @@ var state = {
   step: 1,
   email: '',
   zip: '',
+  zone: '',
+  zoneNumber: '',
+  tempRange: '',
+  lat: '',
+  lon: '',
   selectedCrops: new Set(),
   upsellShown: false
 };
@@ -961,8 +966,29 @@ document.getElementById('zip-input').addEventListener('input', function() {
   var val = this.value.replace(/\D/g, '').slice(0, 5);
   this.value = val;
   var badge = document.getElementById('zone-badge');
-  if (isValidZip(val)) { badge.classList.add('show'); state.zip = val; }
-  else                 { badge.classList.remove('show'); }
+  if (isValidZip(val)) {
+    state.zip = val;
+    // Look up zone from phzmapi.org
+    fetch('https://phzmapi.org/' + val + '.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.zone) {
+          state.zone = data.zone;
+          state.zoneNumber = data.zone.replace(/[ab]/, '');
+          state.tempRange = data.temperature_range;
+          state.lat = data.coordinates ? data.coordinates.lat : '';
+          state.lon = data.coordinates ? data.coordinates.lon : '';
+          badge.innerHTML = '<span class="zone-dot"></span>Zone ' + data.zone + ' &nbsp;·&nbsp; ' + data.temperature_range + '°F';
+          badge.classList.add('show');
+        }
+      })
+      .catch(function() {
+        badge.innerHTML = '<span class="zone-dot"></span>Zone lookup unavailable';
+        badge.classList.add('show');
+      });
+  } else {
+    badge.classList.remove('show');
+  }
   this.classList.remove('has-error');
   document.getElementById('zip-error').textContent = '';
 });
@@ -1105,7 +1131,8 @@ document.getElementById('btn-build').addEventListener('click', function() {
     body: JSON.stringify({
       plan: plan,
       crops: cropNames,
-      zone: state.zip ? '5' : '',  // TODO: real zone lookup from ZIP
+      zone: state.zoneNumber || '5',
+      zone_full: state.zone || '',
       skill: skill,
       region: '',
       zip: state.zip,
