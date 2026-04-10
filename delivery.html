@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Garden Kit - Ready!</title>
+  <title>Your Garden Kit — Your Garden Podcast</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -20,406 +20,407 @@
       --text-muted: #666;
       --border: #e8e8e4;
     }
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--cream);
-      color: var(--text-dark);
-      line-height: 1.6;
-    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.6; }
     h1, h2, h3 { font-family: 'DM Serif Display', serif; }
-    h1 { font-size: 2.5rem; margin-bottom: 1.5rem; color: var(--dark-green); }
-    h2 { font-size: 1.8rem; margin-bottom: 1.5rem; color: var(--dark-green); }
-    h3 { font-size: 1.4rem; margin-bottom: 1rem; color: var(--dark-green); }
-    .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
-    .header { text-align: center; margin-bottom: 4rem; }
-    .profile-tag { display: inline-block; background: var(--sage-light); color: var(--dark-green); padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.9rem; font-weight: 600; margin: 0.5rem 0.25rem; }
+    .container { max-width: 700px; margin: 0 auto; padding: 2rem 1.5rem; }
 
-    .explanation {
+    .header {
       text-align: center;
-      margin-bottom: 3rem;
-      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      padding: 2rem 0;
+    }
+    .header h1 {
+      color: var(--dark-green);
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .header p {
       color: var(--text-muted);
-      max-width: 600px;
-      margin-left: auto;
-      margin-right: auto;
-      margin-bottom: 3rem;
+      font-size: 1rem;
+    }
+    .zone-tag {
+      display: inline-block;
+      background: var(--sage-light);
+      color: var(--dark-green);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-top: 0.5rem;
     }
 
-    .split-layout {
-      display: grid;
-      grid-template-columns: 1fr 1px 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
+    .section-intro {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: var(--sage-light);
+      border-radius: 12px;
+      color: var(--dark-green);
     }
+    .section-intro h2 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+    .section-intro p { font-size: 0.9rem; line-height: 1.6; }
 
-    .vertical-divider {
-      background: var(--border);
-      width: 1px;
-      grid-column: 2;
-    }
-
-    .left-column {
-      grid-column: 1;
-    }
-
-    .right-column {
-      grid-column: 3;
-    }
-
-    @media (max-width: 768px) {
-      .split-layout {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .vertical-divider {
-        display: none;
-      }
-
-      .left-column,
-      .right-column {
-        grid-column: 1;
-      }
-
-      .horizontal-divider {
-        display: block;
-        height: 1px;
-        background: var(--border);
-        margin: 2rem 0;
-      }
-    }
-
-    .horizontal-divider {
-      display: none;
-    }
-
+    /* Episode card */
     .episode-card {
       background: white;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.5rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
+      transition: all 0.3s ease;
     }
-    .episode-header {
+    .episode-card.loading {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    .episode-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-header {
       display: flex;
       align-items: center;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
-    .crop-emoji { font-size: 3rem; }
-    .crop-title { flex: 1; }
-    .crop-title h3 { margin-bottom: 0.25rem; }
-    .crop-title .profile-tag { font-size: 0.8rem; }
+    .crop-emoji { font-size: 2.5rem; }
+    .crop-info h3 { font-size: 1.2rem; color: var(--dark-green); margin-bottom: 0.2rem; }
+    .crop-info .skill-tag {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: var(--cream-alt);
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+    }
+
+    /* Intro episode row */
     .episode-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 0;
+      border-top: 1px solid var(--border);
     }
-    .episode-row:last-child { border-bottom: none; }
-    .episode-label { color: var(--text-muted); font-size: 0.9rem; }
+    .episode-row:first-of-type { border-top: none; }
+
+    .episode-label {
+      display: flex;
+      flex-direction: column;
+    }
+    .episode-label .title { font-size: 0.9rem; font-weight: 600; color: var(--text-dark); }
+    .episode-label .subtitle { font-size: 0.75rem; color: var(--text-muted); }
+
+    .episode-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Progress bar for loading */
+    .mini-progress {
+      width: 120px;
+      height: 6px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .mini-progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(to right, var(--sage), var(--moss));
+      border-radius: 99px;
+      transition: width 1.5s ease;
+    }
+
     .play-btn {
       background: var(--dark-green);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      transition: all 0.3s;
+      font-size: 0.85rem;
+      transition: all 0.2s;
     }
     .play-btn:hover { background: var(--moss); }
-    .play-btn:active { transform: scale(0.98); }
-    .player-container {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: var(--cream-alt);
-      border-radius: 8px;
-      display: none;
-    }
-    .player-container.active { display: block; }
-    audio {
-      width: 100%;
-      height: 40px;
-    }
-    .rss-section {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2rem;
-    }
-    .rss-title { font-size: 1rem; color: var(--text-muted); margin-bottom: 1rem; }
-    .feed-url {
-      background: var(--cream-alt);
-      padding: 1rem;
-      border-radius: 8px;
-      font-family: 'Monaco', monospace;
-      font-size: 0.9rem;
-      word-break: break-all;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-    .copy-btn {
-      background: var(--terra);
-      color: white;
-      border: none;
-      padding: 0.6rem 1.2rem;
+
+    .coming-soon-tag {
+      background: var(--terra-light);
+      color: var(--terra);
+      padding: 0.3rem 0.8rem;
       border-radius: 6px;
-      cursor: pointer;
+      font-size: 0.78rem;
       font-weight: 600;
-      white-space: nowrap;
-      transition: all 0.3s;
     }
-    .copy-btn:hover { background: #a0643d; }
-    .copy-feedback {
-      display: none;
-      color: var(--sage);
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    .copy-feedback.show { display: inline; }
-    .accordion {
-      margin-top: 1.5rem;
-    }
-    .accordion-item {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      margin-bottom: 0.75rem;
-      overflow: hidden;
-    }
-    .accordion-header {
-      padding: 1rem;
+
+    /* Audio player */
+    .audio-player {
+      margin-top: 0.8rem;
+      padding: 0.8rem;
       background: var(--cream-alt);
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      transition: background 0.2s;
-    }
-    .accordion-header:hover { background: var(--sage-light); }
-    .accordion-header.active { background: var(--dark-green); color: white; }
-    .accordion-icon {
-      font-size: 1.2rem;
-      transition: transform 0.3s;
-    }
-    .accordion-header.active .accordion-icon { transform: rotate(180deg); }
-    .accordion-content {
+      border-radius: 8px;
       display: none;
+    }
+    .audio-player.active { display: block; }
+    audio { width: 100%; height: 40px; }
+
+    /* Custom section */
+    .custom-notice {
+      background: var(--terra-light);
+      border: 1px solid var(--terra);
+      border-radius: 12px;
       padding: 1.5rem;
-      background: white;
+      margin-top: 2rem;
+      text-align: center;
     }
-    .accordion-content.active { display: block; }
-    .accordion-content ol {
-      list-style-position: inside;
-      line-height: 1.8;
-      color: var(--text-dark);
-    }
-    .accordion-content li { margin-bottom: 0.75rem; }
+    .custom-notice h3 { color: var(--terra); font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .custom-notice p { color: var(--text-dark); font-size: 0.9rem; }
+
     .footer {
       text-align: center;
-      padding: 3rem 0;
+      padding: 2rem 0;
       border-top: 1px solid var(--border);
-      margin-top: 3rem;
+      margin-top: 2rem;
     }
     .footer-email { font-weight: 600; color: var(--dark-green); }
-    .footer-note { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
+    .footer-note { font-size: 0.82rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    /* Loading state */
+    .loading-state {
+      text-align: center;
+      padding: 3rem;
+    }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 4px solid var(--border);
+      border-top: 4px solid var(--moss);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="header">
-      <h1>🌱 Your garden kit is ready, Sarah!</h1>
-      <p style="font-size: 1.1rem; color: var(--text-muted);">Here are your personalized growing guides for <strong>Milton, WI • Zone 5b</strong></p>
+    <div id="loading-state" class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Loading your garden kit...</p>
     </div>
 
-    <div class="explanation">
-      <p>Listen right here or add your episodes to Apple Podcasts, Spotify, or any podcast app.</p>
-    </div>
-
-    <div class="split-layout">
-      <div class="left-column">
-        <h3>🎧 Listen Here</h3>
-        <div id="episodes"></div>
+    <div id="content" style="display:none;">
+      <div class="header">
+        <h1>🌱 Your garden kit is ready!</h1>
+        <p>Here are your growing guides</p>
+        <span class="zone-tag" id="zone-display"></span>
       </div>
 
-      <div class="vertical-divider"></div>
+      <div class="section-intro">
+        <h2>🎧 Listen Now</h2>
+        <p>Your zone-specific intro episodes are ready below. Your fully personalized deep-dive episodes are being built and will be available within 24 hours — we'll email you when they're ready.</p>
+      </div>
 
-      <div class="right-column">
-        <h3>📱 Add to Your Podcast App</h3>
+      <div id="episodes"></div>
 
-        <div class="rss-section">
-          <p class="rss-title">Add your private feed to any podcast app. This link is yours — don't share it.</p>
+      <div class="custom-notice">
+        <h3>🎙️ Your Personalized Deep Dives</h3>
+        <p>We're building your fully customized episodes right now — tailored to your exact location, soil, and growing conditions. You'll get an email within 24 hours when they're ready to listen.</p>
+      </div>
 
-          <div class="feed-url">
-            <span>https://feed.yourgardencast.com/f/abc123xyz789/feed.xml</span>
-            <button class="copy-btn" onclick="copyFeedUrl()">Copy Link</button>
-            <span class="copy-feedback" id="copyFeedback">Copied!</span>
-          </div>
-
-          <div class="accordion">
-            <div class="accordion-item">
-              <div class="accordion-header" onclick="toggleAccordion(0)">
-                <span>📱 iPhone / Apple Podcasts</span>
-                <span class="accordion-icon">▼</span>
-              </div>
-              <div class="accordion-content" id="accordion0">
-                <ol>
-                  <li>Open the <strong>Apple Podcasts</strong> app</li>
-                  <li>Tap <strong>Library</strong> at the bottom</li>
-                  <li>Tap the three dots (<strong>...</strong>) in the top right</li>
-                  <li>Tap <strong>Follow a Show by URL</strong></li>
-                  <li>Paste your link above and tap <strong>Follow</strong></li>
-                  <li>Your episodes will appear in your Library within a minute</li>
-                </ol>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <div class="accordion-header" onclick="toggleAccordion(1)">
-                <span>🤖 Android / Spotify</span>
-                <span class="accordion-icon">▼</span>
-              </div>
-              <div class="accordion-content" id="accordion1">
-                <ol>
-                  <li>Open the <strong>Spotify</strong> app</li>
-                  <li>Tap the <strong>Activity</strong> icon (bottom right)</li>
-                  <li>Tap <strong>Subscriptions</strong> in the top right</li>
-                  <li>Tap the three dots (<strong>...</strong>) menu</li>
-                  <li>Tap <strong>Add by RSS feed</strong></li>
-                  <li>Paste your link and tap <strong>Subscribe</strong></li>
-                </ol>
-              </div>
-            </div>
-
-            <div class="accordion-item">
-              <div class="accordion-header" onclick="toggleAccordion(2)">
-                <span>🎙️ Any app (Pocket Casts, Overcast, etc.)</span>
-                <span class="accordion-icon">▼</span>
-              </div>
-              <div class="accordion-content" id="accordion2">
-                <ol>
-                  <li>Copy your private feed link above</li>
-                  <li>Open your podcast app (Pocket Casts, Overcast, Podcast Addict, etc.)</li>
-                  <li>Look for <strong>Add by URL</strong> or <strong>Add RSS Feed</strong> (usually in Settings or the + menu)</li>
-                  <li>Paste your link and tap <strong>Subscribe</strong> or <strong>Add</strong></li>
-                  <li>Episodes will sync automatically</li>
-                </ol>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="footer">
+        <p>Questions? <span class="footer-email">hello@yourgardenpodcast.com</span></p>
+        <p class="footer-note">This is your personal garden kit. Episodes are personalized to your growing profile.</p>
       </div>
     </div>
 
-    <div class="horizontal-divider"></div>
-
-    <div class="footer">
-      <p>Questions? <span class="footer-email">hello@yourgardencast.com</span></p>
-      <p class="footer-note">This is your personal kit. Episodes are personalized to your garden profile and available as long as your subscription is active.</p>
+    <div id="error-state" class="error-state" style="display:none;">
+      <h2>😞 Couldn't find your order</h2>
+      <p>If you just completed your purchase, it may take a moment to process. Try refreshing the page.</p>
+      <p style="margin-top: 1rem;">Need help? <strong>hello@yourgardenpodcast.com</strong></p>
     </div>
   </div>
 
   <script>
-    const DEMO_CROPS = [
-      { name: 'Tomato', emoji: '🍅', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
-      { name: 'Kale', emoji: '🥬', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
-      { name: 'Cucumber', emoji: '🥒', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
-      { name: 'Carrot', emoji: '🥕', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
-      { name: 'Basil', emoji: '🌿', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
-      { name: 'Zucchini', emoji: '🥒', zone: '5b', type: 'Raised Bed', level: 'Intermediate' },
-      { name: 'Green Beans', emoji: '🫘', zone: '5b', type: 'Raised Bed', level: 'Intermediate' }
-    ];
+    const API_BASE = 'https://api.yourgardenpodcast.com';
 
-    function renderEpisodes() {
+    async function loadOrder() {
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get('order_id');
+
+      if (!orderId) {
+        showError();
+        return;
+      }
+
+      try {
+        const resp = await fetch(`${API_BASE}/order/${orderId}`);
+        if (!resp.ok) {
+          showError();
+          return;
+        }
+
+        const data = await resp.json();
+        renderOrder(data);
+      } catch (e) {
+        showError();
+      }
+    }
+
+    function showError() {
+      document.getElementById('loading-state').style.display = 'none';
+      document.getElementById('error-state').style.display = 'block';
+    }
+
+    function renderOrder(data) {
+      const { order, episodes } = data;
+
+      // Update header
+      document.getElementById('zone-display').textContent = 
+        `Zone ${order.zone}${order.region ? ' · ' + order.region : ''}`;
+
+      // Render episode cards sequentially
       const container = document.getElementById('episodes');
       container.innerHTML = '';
 
-      DEMO_CROPS.forEach(crop => {
+      episodes.forEach((ep, index) => {
         const card = document.createElement('div');
-        card.className = 'episode-card';
+        card.className = 'episode-card loading';
+        card.id = `card-${index}`;
+
+        let introHtml;
+        if (ep.intro.ready) {
+          introHtml = `
+            <div class="episode-row">
+              <div class="episode-label">
+                <span class="title">Intro to Growing ${ep.crop}</span>
+                <span class="subtitle">Zone-specific overview · ~5 min</span>
+              </div>
+              <div class="episode-status">
+                <div class="mini-progress" id="progress-${index}">
+                  <div class="mini-progress-bar" id="pbar-${index}"></div>
+                </div>
+                <button class="play-btn" id="playbtn-${index}" style="display:none;" onclick="togglePlay('${ep.intro.key}', ${index})">▶ Listen</button>
+              </div>
+            </div>
+            <div class="audio-player" id="player-${index}"></div>
+          `;
+        } else {
+          introHtml = `
+            <div class="episode-row">
+              <div class="episode-label">
+                <span class="title">Intro to Growing ${ep.crop}</span>
+                <span class="subtitle">Zone-specific overview · ~5 min</span>
+              </div>
+              <div class="episode-status">
+                <span class="coming-soon-tag">Preparing...</span>
+              </div>
+            </div>
+          `;
+        }
+
         card.innerHTML = `
-          <div class="episode-header">
-            <div class="crop-emoji">${crop.emoji}</div>
-            <div class="crop-title">
-              <h3>${crop.name}</h3>
-              <span class="profile-tag">Zone ${crop.zone}</span>
-              <span class="profile-tag">${crop.type}</span>
-              <span class="profile-tag">${crop.level}</span>
+          <div class="card-header">
+            <span class="crop-emoji">${ep.emoji}</span>
+            <div class="crop-info">
+              <h3>${ep.crop}</h3>
+              <span class="skill-tag">${order.skill === 'beginner' ? 'Beginner' : 'Experienced'}</span>
             </div>
           </div>
+          ${introHtml}
           <div class="episode-row">
-            <span class="episode-label">Short (8-10 min)</span>
-            <button class="play-btn" onclick="playEpisode(event, '${crop.name}', 'short')">▶ Play</button>
+            <div class="episode-label">
+              <span class="title">Full Personalized Guide</span>
+              <span class="subtitle">Deep dive · 20-25 min</span>
+            </div>
+            <div class="episode-status">
+              <span class="coming-soon-tag">Within 24 hours</span>
+            </div>
           </div>
-          <div class="episode-row">
-            <span class="episode-label">Full (20-30 min)</span>
-            <button class="play-btn" onclick="playEpisode(event, '${crop.name}', 'full')">▶ Play</button>
-          </div>
-          <div class="player-container" id="player-${crop.name}-short"></div>
-          <div class="player-container" id="player-${crop.name}-full"></div>
         `;
+
         container.appendChild(card);
       });
-    }
 
-    let currentPlayer = null;
+      // Show content
+      document.getElementById('loading-state').style.display = 'none';
+      document.getElementById('content').style.display = 'block';
 
-    function playEpisode(event, cropName, length) {
-      event.preventDefault();
-      const playerId = `player-${cropName}-${length}`;
-      const playerContainer = document.getElementById(playerId);
+      // Animate cards sequentially
+      episodes.forEach((ep, index) => {
+        setTimeout(() => {
+          const card = document.getElementById(`card-${index}`);
+          card.classList.remove('loading');
+          card.classList.add('visible');
 
-      // Stop any currently playing audio
-      if (currentPlayer && currentPlayer !== playerId) {
-        document.getElementById(currentPlayer).classList.remove('active');
-        const audio = document.getElementById(currentPlayer).querySelector('audio');
-        if (audio) audio.pause();
-      }
-
-      // Toggle current player
-      playerContainer.classList.toggle('active');
-
-      if (playerContainer.classList.contains('active')) {
-        // Create audio element if it doesn't exist
-        if (!playerContainer.querySelector('audio')) {
-          const audio = document.createElement('audio');
-          audio.controls = true;
-          audio.src = '../ygp-site-v2/sample_clip.mp3';
-          playerContainer.appendChild(audio);
-        }
-        playerContainer.querySelector('audio').play();
-        currentPlayer = playerId;
-      } else {
-        const audio = playerContainer.querySelector('audio');
-        if (audio) audio.pause();
-        currentPlayer = null;
-      }
-    }
-
-    function copyFeedUrl() {
-      const url = 'https://feed.yourgardencast.com/f/abc123xyz789/feed.xml';
-      navigator.clipboard.writeText(url).then(() => {
-        const feedback = document.getElementById('copyFeedback');
-        feedback.classList.add('show');
-        setTimeout(() => feedback.classList.remove('show'), 2000);
+          // If intro is ready, animate the progress bar then show play button
+          if (ep.intro.ready) {
+            setTimeout(() => {
+              const pbar = document.getElementById(`pbar-${index}`);
+              if (pbar) pbar.style.width = '100%';
+              setTimeout(() => {
+                const progress = document.getElementById(`progress-${index}`);
+                const playBtn = document.getElementById(`playbtn-${index}`);
+                if (progress) progress.style.display = 'none';
+                if (playBtn) playBtn.style.display = 'inline-block';
+              }, 1600);
+            }, 300);
+          }
+        }, index * 600);
       });
     }
 
-    function toggleAccordion(index) {
-      const header = document.querySelector(`.accordion-item:nth-child(${index + 1}) .accordion-header`);
-      const content = document.getElementById(`accordion${index}`);
+    let currentAudio = null;
+    let currentIndex = null;
 
-      header.classList.toggle('active');
-      content.classList.toggle('active');
+    function togglePlay(key, index) {
+      const playerDiv = document.getElementById(`player-${index}`);
+      const btn = document.getElementById(`playbtn-${index}`);
+
+      // Stop current audio if different
+      if (currentAudio && currentIndex !== index) {
+        currentAudio.pause();
+        document.getElementById(`player-${currentIndex}`).classList.remove('active');
+        document.getElementById(`playbtn-${currentIndex}`).textContent = '▶ Listen';
+      }
+
+      if (playerDiv.classList.contains('active')) {
+        // Pause
+        if (currentAudio) currentAudio.pause();
+        playerDiv.classList.remove('active');
+        btn.textContent = '▶ Listen';
+        currentAudio = null;
+        currentIndex = null;
+      } else {
+        // Play
+        playerDiv.classList.add('active');
+        if (!playerDiv.querySelector('audio')) {
+          const audio = document.createElement('audio');
+          audio.controls = true;
+          audio.src = `${API_BASE}/episode/${encodeURIComponent(key)}`;
+          audio.addEventListener('ended', () => {
+            playerDiv.classList.remove('active');
+            btn.textContent = '▶ Listen';
+          });
+          playerDiv.appendChild(audio);
+        }
+        const audio = playerDiv.querySelector('audio');
+        audio.play();
+        btn.textContent = '⏸ Pause';
+        currentAudio = audio;
+        currentIndex = index;
+      }
     }
 
-    // Initial render
-    renderEpisodes();
+    // Load on page ready
+    loadOrder();
   </script>
 </body>
 </html>
