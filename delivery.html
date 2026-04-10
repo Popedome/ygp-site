@@ -133,7 +133,7 @@
       transition: width 1.5s ease;
     }
 
-    .play-btn {
+    .play-btn, .dl-btn {
       background: var(--dark-green);
       color: white;
       border: none;
@@ -143,8 +143,12 @@
       font-weight: 600;
       font-size: 0.85rem;
       transition: all 0.2s;
+      text-decoration: none;
     }
-    .play-btn:hover { background: var(--moss); }
+    .play-btn:hover, .dl-btn:hover { background: var(--moss); }
+    .dl-btn { background: var(--terra); }
+    .dl-btn:hover { background: #a3623f; }
+    .btn-group { display: flex; gap: 0.5rem; align-items: center; }
 
     .coming-soon-tag {
       background: var(--terra-light);
@@ -346,7 +350,10 @@
                 <div class="mini-progress" id="progress-${index}">
                   <div class="mini-progress-bar" id="pbar-${index}"></div>
                 </div>
-                <button class="play-btn" id="playbtn-${index}" style="display:none;" onclick="togglePlay('${ep.intro.key}', ${index})">▶ Listen</button>
+                <div class="btn-group">
+                  <button class="play-btn" id="playbtn-${index}" style="display:none;" onclick="togglePlay('${ep.intro.key}', ${index})">▶ Listen</button>
+                  <a class="dl-btn" id="dlbtn-${index}" style="display:none;" href="${API_BASE}/episode/${encodeURIComponent(ep.intro.key)}" download="${ep.crop} - Intro.m4a">⬇</a>
+                </div>
               </div>
             </div>
             <div class="audio-player" id="player-${index}"></div>
@@ -409,6 +416,8 @@
                 const playBtn = document.getElementById(`playbtn-${index}`);
                 if (progress) progress.style.display = 'none';
                 if (playBtn) playBtn.style.display = 'inline-block';
+                const dlBtn = document.getElementById(`dlbtn-${index}`);
+                if (dlBtn) dlBtn.style.display = 'inline-block';
               }, 1600);
             }, 300);
           }
