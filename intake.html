@@ -596,6 +596,12 @@ input.has-error { border-color: #c94f4f !important; box-shadow: none !important;
     <h1>Let's build your<br>garden kit.</h1>
 
     <div class="field">
+      <label for="name-input">First name</label>
+      <input type="text" id="name-input" placeholder="e.g. Sarah" autocomplete="given-name">
+      <div class="field-error" id="name-error"></div>
+    </div>
+
+    <div class="field">
       <label for="email-input">Your email address</label>
       <input type="email" id="email-input" placeholder="you@example.com" autocomplete="email">
       <div class="field-error" id="email-error"></div>
@@ -902,14 +908,27 @@ function updateDots() {
 
 /* ── Step 1 ── */
 document.getElementById('btn-step1').addEventListener('click', function() {
+  var nameInput = document.getElementById('name-input');
+  var nameErrEl = document.getElementById('name-error');
   var emailInput = document.getElementById('email-input');
   var emailErrEl = document.getElementById('email-error');
   var zipInput = document.getElementById('zip-input');
   var zipErrEl = document.getElementById('zip-error');
+  var nameVal = nameInput.value.trim();
   var emailVal = emailInput.value.trim();
   var zipVal = zipInput.value.trim();
 
   var hasErrors = false;
+
+  // Validate name
+  if (!nameVal) {
+    nameInput.classList.add('has-error');
+    nameErrEl.textContent = 'Please enter your first name.';
+    hasErrors = true;
+  } else {
+    nameInput.classList.remove('has-error');
+    nameErrEl.textContent = '';
+  }
 
   // Validate email
   if (!emailVal) {
@@ -940,7 +959,9 @@ document.getElementById('btn-step1').addEventListener('click', function() {
   }
 
   if (hasErrors) {
-    if (!emailVal || !isValidEmail(emailVal)) {
+    if (!nameVal) {
+      nameInput.focus();
+    } else if (!emailVal || !isValidEmail(emailVal)) {
       emailInput.focus();
     } else {
       zipInput.focus();
@@ -948,9 +969,15 @@ document.getElementById('btn-step1').addEventListener('click', function() {
     return;
   }
 
+  state.firstName = nameVal;
   state.email = emailVal;
   state.zip = zipVal;
   goToStep(2);
+});
+
+document.getElementById('name-input').addEventListener('input', function() {
+  this.classList.remove('has-error');
+  document.getElementById('name-error').textContent = '';
 });
 
 document.getElementById('email-input').addEventListener('input', function() {
@@ -1136,7 +1163,8 @@ document.getElementById('btn-build').addEventListener('click', function() {
       skill: skill,
       region: '',
       zip: state.zip,
-      email: state.email
+      email: state.email,
+      first_name: state.firstName || ''
     })
   })
   .then(function(r) { return r.json(); })
