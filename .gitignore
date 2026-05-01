@@ -1,0 +1,9 @@
+# Worker code (contains secrets, deployed separately via wrangler)
+worker/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db

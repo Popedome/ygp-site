@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Garden Dashboard — Your Garden Podcast</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --cream: #faf7f2;
+      --cream-alt: #f5f2ec;
+      --sage-light: #d9e8d2;
+      --sage: #8fa882;
+      --moss: #6b8e6f;
+      --dark-green: #3d5a42;
+      --terra: #b8714f;
+      --terra-light: #f5ece2;
+      --text-dark: #1a1a1a;
+      --text-muted: #666;
+      --text-light: #999;
+      --border: #e8e8e4;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.6; }
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 500; }
+
+    /* Header */
+    .site-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+    }
+    .site-header a.logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--dark-green);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .user-email {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+    .logout-btn {
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.4rem 1rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .logout-btn:hover {
+      border-color: var(--terra);
+      color: var(--terra);
+    }
+
+    /* Main */
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .welcome-section {
+      margin-bottom: 2rem;
+    }
+    .welcome-section h1 {
+      font-size: 2rem;
+      color: var(--dark-green);
+      margin-bottom: 0.3rem;
+    }
+    .welcome-section p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* Order card */
+    .order-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .order-header h2 {
+      font-size: 1.3rem;
+      color: var(--dark-green);
+    }
+    .order-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .tag-plan {
+      background: var(--sage-light);
+      color: var(--dark-green);
+    }
+    .tag-zone {
+      background: var(--terra-light);
+      color: var(--terra);
+    }
+    .tag-status {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .tag-processing {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .order-date {
+      color: var(--text-light);
+      font-size: 0.82rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Episode row */
+    .episode-list {
+      border-top: 1px solid var(--border);
+    }
+    .ep-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+    }
+    .ep-row:last-child { border-bottom: none; }
+
+    .ep-info {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex: 1;
+      min-width: 0;
+    }
+    .ep-emoji { font-size: 1.8rem; flex-shrink: 0; }
+    .ep-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+    .ep-types {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.2rem;
+    }
+    .ep-type-tag {
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    .ep-type-ready {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .ep-type-pending {
+      background: var(--cream-alt);
+      color: var(--text-light);
+    }
+
+    .ep-actions {
+      display: flex;
+      gap: 0.4rem;
+      flex-shrink: 0;
+    }
+    .play-btn, .dl-btn {
+      border: none;
+      padding: 0.45rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.8rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .play-btn {
+      background: var(--dark-green);
+      color: white;
+    }
+    .play-btn:hover { background: var(--moss); }
+    .dl-btn {
+      background: var(--terra);
+      color: white;
+    }
+    .dl-btn:hover { background: #a3623f; }
+
+    /* Audio player */
+    .audio-player {
+      padding: 0.8rem;
+      background: var(--cream-alt);
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      display: none;
+    }
+    .audio-player.active { display: block; }
+    audio { width: 100%; height: 40px; }
+
+    /* States */
+    .loading-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .loading-spinner {
+      width: 40px; height: 40px;
+      border: 4px solid var(--border);
+      border-top: 4px solid var(--moss);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    .empty-state .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state h2 { color: var(--dark-green); font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .empty-state p { color: var(--text-muted); margin-bottom: 1.5rem; }
+    .cta-btn {
+      display: inline-block;
+      background: var(--dark-green);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .cta-btn:hover { background: var(--moss); }
+
+    .error-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .site-header { padding: 1rem; flex-wrap: wrap; gap: 0.5rem; }
+      .ep-row { flex-direction: column; align-items: flex-start; }
+      .ep-actions { width: 100%; justify-content: flex-start; }
+      .order-header { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-header">
+    <a href="/" class="logo">🌱 Your Garden Podcast</a>
+    <div class="header-right" id="header-right" style="display:none;">
+      <span class="user-email" id="user-email"></span>
+      <button class="logout-btn" onclick="logout()">Log Out</button>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div id="loading-state" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading your garden...</p>
+  </div>
+
+  <!-- Main content -->
+  <div class="container" id="main-content" style="display:none;">
+    <div class="welcome-section">
+      <h1 id="welcome-title">🌱 My Garden</h1>
+      <p>Your personalized growing guides, all in one place.</p>
+    </div>
+    <div id="orders-container"></div>
+  </div>
+
+  <!-- Empty state -->
+  <div id="empty-state" class="empty-state" style="display:none;">
+    <div class="icon">🌿</div>
+    <h2>No orders yet</h2>
+    <p>Get your first personalized garden podcast kit!</p>
+    <a href="/intake.html" class="cta-btn">Build My Garden Kit →</a>
+  </div>
+
+  <!-- Error state -->
+  <div id="error-state" class="error-state" style="display:none;">
+    <p>Something went wrong loading your dashboard. <a href="/login.html">Try logging in again.</a></p>
+  </div>
+
+  <script>
+    var API = 'https://api.yourgardenpodcast.com';
+    var currentAudio = null;
+    var currentPlayBtn = null;
+
+    // ─── Auth Flow ───
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var token = params.get('token');
+      var session = localStorage.getItem('ygp_session');
+
+      if (token) {
+        // Verify magic link token
+        fetch(API + '/auth/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: token })
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.session_token) {
+            localStorage.setItem('ygp_session', data.session_token);
+            // Clean URL
+            window.history.replaceState({}, '', '/dashboard.html');
+            loadDashboard(data.session_token);
+          } else {
+            showError(data.error || 'Invalid or expired link.');
+          }
+        })
+        .catch(function() { showError('Connection error. Please try again.'); });
+      } else if (session) {
+        loadDashboard(session);
+      } else {
+        window.location.href = '/login.html';
+      }
+    })();
+
+    function loadDashboard(sessionToken) {
+      fetch(API + '/dashboard/orders', {
+        headers: { 'Authorization': 'Bearer ' + sessionToken }
+      })
+      .then(function(r) {
+        if (r.status === 401) {
+          localStorage.removeItem('ygp_session');
+          window.location.href = '/login.html';
+          return null;
+        }
+        return r.json();
+      })
+      .then(function(data) {
+        if (!data) return;
+        if (data.error) { showError(data.error); return; }
+
+        document.getElementById('loading-state').style.display = 'none';
+        document.getElementById('user-email').textContent = data.email;
+        document.getElementById('header-right').style.display = 'flex';
+
+        if (!data.orders || data.orders.length === 0) {
+          document.getElementById('empty-state').style.display = 'block';
+          return;
+        }
+
+        document.getElementById('main-content').style.display = 'block';
+        renderOrders(data.orders);
+      })
+      .catch(function() { showError('Failed to load dashboard.'); });
+    }
+
+    function renderOrders(orders) {
+      var container = document.getElementById('orders-container');
+      container.innerHTML = '';
+
+      orders.forEach(function(order, orderIdx) {
+        var card = document.createElement('div');
+        card.className = 'order-card';
+
+        var date = new Date(order.createdAt);
+        var dateStr = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+
+        var planLabel = order.plan.charAt(0).toUpperCase() + order.plan.slice(1);
+        var statusTag = order.status === 'ready'
+          ? '<span class="tag tag-status">✓ Ready</span>'
+          : '<span class="tag tag-processing">⏳ Processing</span>';
+
+        card.innerHTML =
+          '<div class="order-header">' +
+            '<div>' +
+              '<h2>' + planLabel + ' Garden Kit</h2>' +
+              '<div class="order-date">' + dateStr + '</div>' +
+            '</div>' +
+            '<div class="order-meta">' +
+              '<span class="tag tag-plan">' + planLabel + '</span>' +
+              (order.zone ? '<span class="tag tag-zone">Zone ' + order.zone + '</span>' : '') +
+              statusTag +
+            '</div>' +
+          '</div>' +
+          '<div class="episode-list" id="episodes-' + orderIdx + '"></div>';
+
+        container.appendChild(card);
+
+        var epContainer = document.getElementById('episodes-' + orderIdx);
+        order.episodes.forEach(function(ep, epIdx) {
+          var row = document.createElement('div');
+          var rowId = 'ep-' + orderIdx + '-' + epIdx;
+
+          // Determine which episodes are available
+          var typeTags = '';
+          var hasAny = false;
+
+          if (ep.intro.ready) {
+            typeTags += '<span class="ep-type-tag ep-type-ready">Intro ✓</span>';
+            hasAny = true;
+          }
+          if (ep.quick.ready) {
+            typeTags += '<span class="ep-type-tag ep-type-ready">Quick ✓</span>';
+            hasAny = true;
+          }
+          if (ep.full.ready) {
+            typeTags += '<span class="ep-type-tag ep-type-ready">Full ✓</span>';
+            hasAny = true;
+          }
+          if (!ep.intro.ready) typeTags += '<span class="ep-type-tag ep-type-pending">Intro</span>';
+          if (!ep.quick.ready) typeTags += '<span class="ep-type-tag ep-type-pending">Quick</span>';
+          if (!ep.full.ready) typeTags += '<span class="ep-type-tag ep-type-pending">Full</span>';
+
+          // Build action buttons for ready episodes
+          var actions = '';
+          if (ep.intro.ready) {
+            actions += '<button class="play-btn" onclick="playEpisode(\'' + ep.intro.key + '\', this, \'' + rowId + '-intro\')">▶ Intro</button>';
+          }
+          if (ep.quick.ready) {
+            actions += '<button class="play-btn" onclick="playEpisode(\'' + ep.quick.key + '\', this, \'' + rowId + '-quick\')">▶ Quick</button>';
+          }
+          if (ep.full.ready) {
+            actions += '<button class="play-btn" onclick="playEpisode(\'' + ep.full.key + '\', this, \'' + rowId + '-full\')">▶ Full</button>';
+          }
+
+          row.innerHTML =
+            '<div class="ep-row">' +
+              '<div class="ep-info">' +
+                '<span class="ep-emoji">' + ep.emoji + '</span>' +
+                '<div>' +
+                  '<div class="ep-name">' + ep.crop + '</div>' +
+                  '<div class="ep-types">' + typeTags + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div class="ep-actions">' + actions + '</div>' +
+            '</div>' +
+            '<div class="audio-player" id="player-' + rowId + '-intro"><audio controls></audio></div>' +
+            '<div class="audio-player" id="player-' + rowId + '-quick"><audio controls></audio></div>' +
+            '<div class="audio-player" id="player-' + rowId + '-full"><audio controls></audio></div>';
+
+          epContainer.appendChild(row);
+        });
+      });
+    }
+
+    function playEpisode(key, btn, playerId) {
+      var playerEl = document.getElementById('player-' + playerId);
+      var audioEl = playerEl.querySelector('audio');
+
+      // If same player is active, toggle off
+      if (playerEl.classList.contains('active')) {
+        audioEl.pause();
+        playerEl.classList.remove('active');
+        return;
+      }
+
+      // Stop any current audio
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.parentElement.classList.remove('active');
+      }
+
+      // Close all players
+      document.querySelectorAll('.audio-player.active').forEach(function(p) {
+        p.classList.remove('active');
+        p.querySelector('audio').pause();
+      });
+
+      var src = API + '/episode/' + encodeURIComponent(key);
+      audioEl.src = src;
+      playerEl.classList.add('active');
+      audioEl.play();
+      currentAudio = audioEl;
+    }
+
+    function logout() {
+      localStorage.removeItem('ygp_session');
+      window.location.href = '/';
+    }
+
+    function showError(msg) {
+      document.getElementById('loading-state').style.display = 'none';
+      var el = document.getElementById('error-state');
+      el.querySelector('p').innerHTML = msg + ' <a href="/login.html">Try logging in again.</a>';
+      el.style.display = 'block';
+    }
+  </script>
+</body>
+</html>

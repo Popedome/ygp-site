@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In — Your Garden Podcast</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --cream: #faf7f2;
+      --cream-alt: #f5f2ec;
+      --sage-light: #d9e8d2;
+      --sage: #8fa882;
+      --moss: #6b8e6f;
+      --dark-green: #3d5a42;
+      --terra: #b8714f;
+      --terra-light: #f5ece2;
+      --text-dark: #1a1a1a;
+      --text-muted: #666;
+      --text-light: #999;
+      --border: #e8e8e4;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; }
+    h1, h2, h3 { font-family: 'DM Serif Display', serif; font-weight: 500; }
+
+    .header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+    }
+    .header a {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: var(--dark-green);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .login-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .login-card h1 {
+      font-size: 1.8rem;
+      color: var(--dark-green);
+      margin-bottom: 0.5rem;
+    }
+
+    .login-card .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+    .form-group input {
+      width: 100%;
+      padding: 0.8rem 1rem;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+      background: var(--cream);
+    }
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--moss);
+      background: white;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.9rem;
+      background: var(--dark-green);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-btn:hover { background: var(--moss); }
+    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .error-msg {
+      background: #fef2f2;
+      color: #b91c1c;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    /* Success state */
+    .success-state {
+      text-align: center;
+      display: none;
+    }
+    .success-state .icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .success-state h2 {
+      color: var(--dark-green);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .success-state p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+    .success-state .email-highlight {
+      color: var(--dark-green);
+      font-weight: 600;
+    }
+    .try-again-link {
+      color: var(--moss);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .try-again-link:hover { text-decoration: underline; }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.82rem;
+      color: var(--text-light);
+    }
+    .footer-note a {
+      color: var(--moss);
+      text-decoration: none;
+    }
+    .footer-note a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <a href="/">🌱 Your Garden Podcast</a>
+  </div>
+
+  <div class="login-container">
+    <div class="login-card">
+      <!-- Login Form -->
+      <div id="login-form">
+        <h1>Welcome back</h1>
+        <p class="subtitle">Enter your email and we'll send you a magic link to access your garden dashboard.</p>
+
+        <div class="error-msg" id="error-msg"></div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+
+        <button class="login-btn" id="login-btn" onclick="handleLogin()">
+          Send Magic Link
+        </button>
+
+        <p class="footer-note">
+          Don't have an account? <a href="/intake.html">Get your first garden kit →</a>
+        </p>
+      </div>
+
+      <!-- Success State -->
+      <div id="success-state" class="success-state">
+        <div class="icon">📬</div>
+        <h2>Check your email!</h2>
+        <p>We sent a login link to <span class="email-highlight" id="sent-email"></span>. Click the link in the email to access your dashboard.</p>
+        <p style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 1rem;">The link expires in 15 minutes. Check your spam folder if you don't see it.</p>
+        <a href="#" class="try-again-link" onclick="resetForm(); return false;">Try a different email</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var API = 'https://api.yourgardenpodcast.com';
+
+    // Check if user already has a session
+    (function() {
+      var session = localStorage.getItem('ygp_session');
+      if (session) {
+        // Verify it's still valid
+        fetch(API + '/auth/me', {
+          headers: { 'Authorization': 'Bearer ' + session }
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.email) {
+            window.location.href = '/dashboard.html';
+          }
+        })
+        .catch(function() {});
+      }
+    })();
+
+    function handleLogin() {
+      var emailInput = document.getElementById('email');
+      var email = emailInput.value.trim().toLowerCase();
+      var errorEl = document.getElementById('error-msg');
+      var btn = document.getElementById('login-btn');
+
+      errorEl.style.display = 'none';
+
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        errorEl.textContent = 'Please enter a valid email address.';
+        errorEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      fetch(API + '/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.error) {
+          errorEl.textContent = data.error;
+          errorEl.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Send Magic Link';
+        } else {
+          document.getElementById('sent-email').textContent = email;
+          document.getElementById('login-form').style.display = 'none';
+          document.getElementById('success-state').style.display = 'block';
+        }
+      })
+      .catch(function() {
+        errorEl.textContent = 'Something went wrong. Please try again.';
+        errorEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Send Magic Link';
+      });
+    }
+
+    function resetForm() {
+      document.getElementById('login-form').style.display = 'block';
+      document.getElementById('success-state').style.display = 'none';
+      document.getElementById('login-btn').disabled = false;
+      document.getElementById('login-btn').textContent = 'Send Magic Link';
+      document.getElementById('email').value = '';
+      document.getElementById('error-msg').style.display = 'none';
+    }
+
+    // Enter key submits
+    document.getElementById('email').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+</html>
