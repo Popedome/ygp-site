@@ -401,15 +401,31 @@
             </div>
           </div>
           ${introHtml}
+          ${ep.full.ready ? `
           <div class="episode-row">
             <div class="episode-label">
               <span class="title">Full Personalized Guide</span>
-              <span class="subtitle">Deep dive · 20-25 min</span>
+              <span class="subtitle">Deep dive · 20-30 min</span>
+            </div>
+            <div class="episode-status">
+              <div class="btn-group">
+                <button class="play-btn" onclick="togglePlay('${ep.full.key}', 'full-${index}')">▶ Listen</button>
+                <a class="dl-btn" href="${API_BASE}/episode/${encodeURIComponent(ep.full.key)}" download="${ep.crop} - Full Guide.m4a">⬇</a>
+              </div>
+            </div>
+          </div>
+          <div class="audio-player" id="player-full-${index}"></div>
+          ` : `
+          <div class="episode-row">
+            <div class="episode-label">
+              <span class="title">Full Personalized Guide</span>
+              <span class="subtitle">Deep dive · 20-30 min</span>
             </div>
             <div class="episode-status">
               <span class="coming-soon-tag">Within 24 hours</span>
             </div>
           </div>
+          `}
         `;
 
         container.appendChild(card);
